@@ -1,8 +1,9 @@
 'use strict';
 
+var logger = require('./logger.js');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-var logger = require('./logger.js');
+
 
 function connectDB(uri, options){
 

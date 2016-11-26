@@ -19,7 +19,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-          template: 'app/index.tpl.html',
+          template: 'app/public/index.tpl.html',
           inject: 'body',
           filename: 'index.html'
         }),
@@ -28,6 +28,9 @@ module.exports = {
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify('development'),
+          'process.env.APP_NAME': JSON.stringify("<%= appName %>"),
+          'process.env.APP_PORT': 3000,
+          'process.env.APP_HOST': 'localhost',
           'process.env.LOG_FILENAME': JSON.stringify('logger_data')
         })
     ],

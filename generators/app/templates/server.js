@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config');
+var logger = require('./connectors/logger');
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
@@ -21,10 +22,10 @@ new WebpackDevServer(webpack(config), {
       chunks: false,
       chunkModules: false
     }
-}).listen(3000, 'localhost', function (err) {
+}).listen(process.env.APP_PORT, process.env.APP_HOST, function (err) {
     if (err) {
-        console.log(err);
+        logger.error(err);
     }
 
-  console.log('Listening at localhost:3000');
+    logger.info('Listening at %s:%s', process.env.APP_HOST, process.env.APP_PORT);
 });

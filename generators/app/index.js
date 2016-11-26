@@ -69,4 +69,4 @@ module.exports = yeoman.Base.extend({
       this.log(answers);
       done();
     }.bind(this));
-});
+}});
