@@ -1,8 +1,8 @@
 import { combineReducers, createStore } from 'redux';
 import {routerReducer as routing } from 'react-router-redux';
 
-var requireDir = require('require-dir');
-var reducers = requireDir('./');
+var requireDir = require('require-directory');
+var reducers = requireDir(module, { include: /index.js$/ });
 
 const rootReducer = combineReducers({
   reducers,

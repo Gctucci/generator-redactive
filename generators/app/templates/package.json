@@ -19,7 +19,7 @@
   "author": "<%= appAuthor %>",
   "license": "<%= appLicense %>",
   "dependencies": {
-    <% if (appType == 'Frontend') || (appType == 'Fullstack') { %>
+    <% if (appType !== "BackEnd") { %>
       "react": "^15.0.2",
       "react-dom": "^15.0.2",
       "react-hot-loader": "^3.0.0-beta.2",
@@ -47,12 +47,6 @@
     "json-loader": "^0.5.4",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
-    <% if (appType == 'Frontend') || (appType == 'Fullstack') { %>
-      "react-addons-test-utils": "^15.0.2",
-      "redux-devtools": "^3.2.0",
-      "redux-devtools-dock-monitor": "^1.1.1",
-      "redux-devtools-log-monitor": "^1.0.11",
-    <% } %>
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",
     "stats-webpack-plugin": "^0.3.1",
@@ -60,5 +54,11 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
+    <% if (appType !== 'Backend') { %>,
+      "react-addons-test-utils": "^15.0.2",
+      "redux-devtools": "^3.2.0",
+      "redux-devtools-dock-monitor": "^1.1.1",
+      "redux-devtools-log-monitor": "^1.0.11"
+    <% } %>
   }
 }

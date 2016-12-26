@@ -1,13 +1,13 @@
 'use strict';
 
-var logger = require('./logger.js');
+var logger = require('./logger');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
 
 function connectDB(uri, options){
 
-  mongoose.connect(uri, options);
+  var mongoConnection = mongoose.createConnection(uri, options);
   mongoose.connection.on('error', function(err){
 
     logger.error('MongoDB Connection Error ' + err);
@@ -32,10 +32,9 @@ function connectDB(uri, options){
 
   });
 
+  return mongoConnection;
+
 }
-
-
-
 
 
 module.exports.connectDB = connectDB;

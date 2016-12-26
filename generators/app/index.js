@@ -7,16 +7,14 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the slick ' + chalk.red('generator-redactive') + ' generator!'
+      'Welcome to the slick ' + chalk.red('Redactive') + ' generator!'
     ));
-    var done = this.async();
-    this.prompt([
+    var prompts = [
       {
         type: 'input',
         name: 'appName',
         message: 'What should be your App name?',
-        // Defaults to project's folder name
-        default: this.appname
+        default: 'redactive'
       },
       {
         type: 'input',
@@ -48,7 +46,7 @@ module.exports = yeoman.Base.extend({
         type: 'list',
         name: 'appDB',
         message: 'Ok! Now, what type of database do you want?',
-        choices: ['SQL (MySQL)', 'NoSQL (MongoDB)'],
+        choices: ['MySQL', 'MongoDB'],
         when: function(answers){
           return answers.appType !== "FrontEnd";
         }
@@ -63,10 +61,119 @@ module.exports = yeoman.Base.extend({
         name: 'appMessaging',
         message: 'Do you want to setup a messaging System (RabbitMQ)?'
       }
-    ],
-    function(answers){
-      this.props = answers
-      this.log(answers);
-      done();
+    ];
+
+    return this.prompt(prompts).then(function(props){
+      this.props = props;
     }.bind(this));
-}});
+  },
+  writing: function() {
+      // Copy all configuration files
+      this.fs.copyTpl(
+        this.templatePath('package.json'),
+        this.destinationPath('package.json'), {
+          appName: this.props.appName,
+          appDescription: this.props.appDescription,
+          appAuthor: this.props.appAuthor,
+          appLicense: this.props.appLicense,
+          appType: this.props.appType
+        }
+      );
+
+      // Copy all application files
+      this.fs.copyTpl(
+        this.templatePath('server.js'),
+        this.destinationPath('server.js'), {
+          appName: this.props.appName
+        }
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('webpack.config.js'),
+        this.destinationPath('webpack.config.js'), {
+          appName: this.props.appName
+        }
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('webpack.production.config.js'),
+        this.destinationPath('webpack.production.config.js'), {
+          appName: this.props.appName
+        }
+      );
+      // Copy auxiliary connectors and files
+      if(this.props.appMessaging){
+        this.fs.copyTpl(
+          this.templatePath('connectors/messageBroker.js'),
+          this.destinationPath('connectors/messageBroker.js'), {
+            appName: this.props.appName
+          }
+        );
+      }
+
+      this.fs.copyTpl(
+        this.templatePath("connectors/logger.js"),
+        this.destinationPath("connectors/logger.js"),
+        {
+          appName: this.props.appName
+        }
+      )
+
+      this.fs.copyTpl(
+        this.templatePath("logs/"),
+        this.destinationPath("logs/")
+      )
+
+      if(this.props.appType !== "Frontend"){
+        // Copy database files
+        if(this.props.appDB === "MySQL"){
+          this.fs.copyTpl(
+            this.templatePath('connectors/database.sql.js'),
+            this.destinationPath('connectors/database.js'), {
+              appName: this.props.appName
+            }
+          );
+        }
+        else if(this.props.appDB === "MongoDB"){
+          this.fs.copyTpl(
+            this.templatePath('connectors/database.mongodb.js'),
+            this.destinationPath('connectors/database.js'), {
+              appName: this.props.appName
+            }
+          );
+        }
+
+        // Copy api folder and optionally the app folder if developing fullstack
+        this.fs.copyTpl(
+          this.templatePath("api/"),
+          this.destinationPath("api/"),
+          {
+            appName: this.props.appName
+          }
+        )
+        if(this.props.appType === "FullStack"){
+          this.fs.copyTpl(
+            this.templatePath('app/'),
+            this.destinationPath("app/"), {
+              appName: this.props.appName
+            }
+          );
+        }
+      }
+
+      else{
+        this.fs.copyTpl(
+          this.templatePath("api/"),
+          this.destinationPath("api/"),
+          {
+            appName: this.props.appName
+          }
+        )
+      }
+  },
+  // Install dependencies
+  install: function() {
+    this.installDependencies();
+  }
+
+});
