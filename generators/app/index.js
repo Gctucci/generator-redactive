@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 
 module.exports = yeoman.Base.extend({
+
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
@@ -46,7 +47,7 @@ module.exports = yeoman.Base.extend({
         type: 'list',
         name: 'appDB',
         message: 'Ok! Now, what type of database do you want?',
-        choices: ['MySQL', 'MongoDB'],
+        choices: ['MySQL', 'MongoDB', 'SQLite'],
         when: function(answers){
           return answers.appType !== "FrontEnd";
         }
@@ -65,6 +66,15 @@ module.exports = yeoman.Base.extend({
 
     return this.prompt(prompts).then(function(props){
       this.props = props;
+      // Set all variables for being accessed on a sub-generator level
+      this.config.set('appContext', {
+        appName: this.props.appName,
+        appDescription: this.props.appDescription,
+        appAuthor: this.props.appAuthor,
+        appLicense: this.props.appLicense,
+        appType: this.props.appType,
+        appDB: this.props.appDB
+      })
     }.bind(this));
   },
   writing: function() {
@@ -76,7 +86,8 @@ module.exports = yeoman.Base.extend({
           appDescription: this.props.appDescription,
           appAuthor: this.props.appAuthor,
           appLicense: this.props.appLicense,
-          appType: this.props.appType
+          appType: this.props.appType,
+          appDB: this.props.appDB
         }
       );
 
