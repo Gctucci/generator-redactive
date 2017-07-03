@@ -29,10 +29,11 @@
       "redux": "^3.5.2",
     <% } %>
     <% if (appDB === "MongoDB") { %>
-      "mongoose": "^4.11.0"
+      "mongoose": "^4.11.0",
     <% } else { %>
-      "sequelize": "^4.2.1"
+      "sequelize": "^4.2.1",
     <% } %>
+      "glob": "^7.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
