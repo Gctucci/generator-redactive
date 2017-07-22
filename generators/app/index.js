@@ -162,6 +162,13 @@ module.exports = yeoman.Base.extend({
             appName: this.props.appName
           }
         )
+        this.fs.copyTpl(
+          this.templatePath("models/"),
+          this.destinationPath("models/"),
+          {
+            appName: this.props.appName
+          }
+        )
         if(this.props.appType === "FullStack"){
           this.fs.copyTpl(
             this.templatePath('app/'),
@@ -176,6 +183,13 @@ module.exports = yeoman.Base.extend({
         this.fs.copyTpl(
           this.templatePath("api/"),
           this.destinationPath("api/"),
+          {
+            appName: this.props.appName
+          }
+        )
+        this.fs.copyTpl(
+          this.templatePath("models/"),
+          this.destinationPath("models/"),
           {
             appName: this.props.appName
           }
