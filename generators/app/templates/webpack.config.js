@@ -9,8 +9,10 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://localhost:3000',
         'webpack/hot/only-dev-server',
+      <% if( appType !== "Backend" ) {%>
         'react-hot-loader/patch',
         path.join(__dirname, 'app/index.js')
+      <%}%>
     ],
     output: {
         path: path.join(__dirname, '/dist/'),
@@ -18,19 +20,21 @@ module.exports = {
         publicPath: '/'
     },
     plugins: [
+      <% if( appType !== "Backend" ) {%>
         new HtmlWebpackPlugin({
           template: 'app/public/index.tpl.html',
           inject: 'body',
           filename: 'index.html'
         }),
-        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
+      <%}%>
+        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify('development'),
           'process.env.APP_NAME': JSON.stringify("<%= appName %>"),
           'process.env.APP_PORT': 3000,
-          'process.env.APP_HOST': 'localhost',
+          'process.env.APP_HOST': 'http://localhost',
           'process.env.LOG_FILENAME': JSON.stringify('logger_data')
         })
     ],

@@ -102,7 +102,8 @@ module.exports = yeoman.Base.extend({
       this.fs.copyTpl(
         this.templatePath('webpack.config.js'),
         this.destinationPath('webpack.config.js'), {
-          appName: this.props.appName
+          appName: this.props.appName,
+          appType: this.props.appType
         }
       );
 
