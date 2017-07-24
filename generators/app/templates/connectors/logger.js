@@ -1,10 +1,11 @@
 /** Required configuration for logging capabilities */
 
 var winston = require("winston");
+require("winston-mongodb").MongoDB;
 
 var fs = require("fs");
 var glob = require("glob");
-var mongoDB = require("winston-mongodb").MongoDB;
+
 
 var logger = new winston.Logger({
 	transports: [
@@ -46,13 +47,10 @@ if(process.env.NODE_ENV !== "production" && process.env.LOG_FILENAME){
 
 if(process.env.NODE_ENV == "production" && process.env.MONGODB_LOG_NAME){
 	// Adds permanent logging capabilities in case the app is running in prodution
-	logger.add(MongoDB, {
+	logger.add(winston.transports.MongoDB, {
 		level: "info",
-		db: process.env.MONGODB_LOG_NAME,
-		collection: process.env.APP_NAME + "_winston",
-		safe: true,
-		host: process.env.MONGODB_LOG_HOST,
-		port: process.env.MONGODB_LOG_PORT
+		db: process.env.MONGODB_LOG_URI,
+		safe: true
 
 	})
 
