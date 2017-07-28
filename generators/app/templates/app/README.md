@@ -13,5 +13,5 @@ This folder is structured as follows:
 	However, they are placed within the same folder and can be reused as true independent components. To to this, each view is placed inside
 	a subfolder with its corresponding name, and the code is placed in an index.js file.
 	For example, to create a TodoItem component, we put the code in src/modules/views/TodoItem/index.js
-*	index.js: It is the main entry point of the application
-* 	routes.js: Handles all the routes (as in the react-router) for the frontend application
+*	index.js: It is the main entry point of the frontend application
+* routes.js: Handles all the routes (as in the react-router) for the frontend application

@@ -14,3 +14,12 @@ These files can be created automatically by calling yo redactive:model "<modelNa
 For example, to create a user model with a name attribute that is required, one would call:
 
 yo redactive:model "user|name:String:userDefault:required"
+
+When a model is created by the directive above, it is automatically loaded
+with a full RESTful interface, provided by the package [node-restful](https://github.com/baugarten/node-restful) The default format for each call is as follows:
+
+GET /<modelName>
+GET /<modelName>/:id
+POST /<modelName>
+PUT /<modelName>/:id
+DELETE /<modelName>/:id
