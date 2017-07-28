@@ -100,6 +100,27 @@ module.exports = yeoman.Base.extend({
       );
 
       this.fs.copyTpl(
+        this.templatePath('.eslintrc'),
+        this.destinationPath('.eslintrc'), {
+          appName: this.props.appName
+        }
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('.eslintignore'),
+        this.destinationPath('.eslintignore'), {
+          appName: this.props.appName
+        }
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('.babelrc'),
+        this.destinationPath('.babelrc'), {
+          appName: this.props.appName
+        }
+      );
+
+      this.fs.copyTpl(
         this.templatePath('webpack.config.js'),
         this.destinationPath('webpack.config.js'), {
           appName: this.props.appName,
@@ -108,9 +129,10 @@ module.exports = yeoman.Base.extend({
       );
 
       this.fs.copyTpl(
-        this.templatePath('webpack.production.config.js'),
-        this.destinationPath('webpack.production.config.js'), {
-          appName: this.props.appName
+        this.templatePath('webpack.production.js'),
+        this.destinationPath('webpack.production.js'), {
+          appName: this.props.appName,
+          appType: this.props.appType
         }
       );
       // Copy auxiliary connectors and files
