@@ -1,40 +1,30 @@
-'use strict';
+'use strict'
 
-var logger = require('./logger');
-var mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
+var logger = require('./logger')
+var restful = require('node-restful')
+var mongoose = restful.mongoose
+mongoose.Promise = require('bluebird')
 
+function connectDB (uri, options) {
+  var mongoConnection = mongoose.createConnection(uri, options)
+  mongoose.connection.on('error', function (err) {
+    logger.error('MongoDB Connection Error ' + err)
+  })
 
-function connectDB(uri, options){
+  mongoose.connection.on('connected', function (suc) {
+    logger.info('Successfully connected to MongoDB')
+  })
 
-  var mongoConnection = mongoose.createConnection(uri, options);
-  mongoose.connection.on('error', function(err){
+  mongoose.connection.on('disconnected', function (suc) {
+    logger.info('Lost MongoDB connection...')
+  })
 
-    logger.error('MongoDB Connection Error ' + err);
+  mongoose.connection.on('reconnected', function (suc) {
+    logger.info('Reconnected to MongoDB!')
+  })
 
-  });
-
-  mongoose.connection.on('connected', function(suc){
-
-    logger.info('Successfully connected to MongoDB');
-
-  });
-
-  mongoose.connection.on('disconnected', function(suc){
-
-    logger.info('Lost MongoDB connection...');
-
-  });
-
-  mongoose.connection.on('reconnected', function(suc){
-
-    logger.info('Reconnected to MongoDB!');
-
-  });
-
-  return mongoConnection;
-
+  return mongoConnection
 }
 
-
-module.exports.connectDB = connectDB;
+module.exports.connectDB = connectDB
+module.exports.mongoose = mongoose
