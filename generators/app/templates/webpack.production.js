@@ -57,6 +57,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.APP_NAME': JSON.stringify('<%= appName %>'),
       'process.env.APP_PORT': 3000,
+      'process.env.DB_RECONNECT_TIME': 5000,
       'process.env.DB_URI': JSON.stringify('mongodb://localhost:27017/<%= appName %>'),
       // Configuration for Winston logging
       'process.env.LOG_FILENAME': JSON.stringify('/logs/winston.log'),

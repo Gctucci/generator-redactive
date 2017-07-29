@@ -36,7 +36,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Connects automatically to the database
 <% if (appDB === 'MongoDB'){ %>
-db.connectDB(process.env.DB_URI)
+db.connectDB()
 <% } %>
 // Configure Restful API, along with Morgan analytics/logs
 app.use(morgan('combined'))
