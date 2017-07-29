@@ -41,6 +41,8 @@
       "winston-mongodb": "^2.0.10"
   },
   "devDependencies": {
+    "file-loader": "^0.11.2",
+    "ignore-loader": "^0.1.2",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.4",

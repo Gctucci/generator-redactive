@@ -95,7 +95,8 @@ module.exports = yeoman.Base.extend({
       this.fs.copyTpl(
         this.templatePath('server.js'),
         this.destinationPath('server.js'), {
-          appName: this.props.appName
+          appName: this.props.appName,
+          appType: this.props.appType
         }
       );
 
