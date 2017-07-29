@@ -7,6 +7,7 @@ var methodOverride = require('method-override')
 var morgan = require('morgan')
 var config = require('./webpack.config')
 var logger = require('./connectors/logger')
+var db = require('./connectors/database')
 var models = require('./models')
 
 const app = express()
@@ -32,6 +33,11 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(middleware)
   app.use(webpackHotMiddleware(compiler))
 }
+
+// Connects automatically to the database
+<% if (appDB === 'MongoDB'){ %>
+db.connectDB(process.env.DB_URI)
+<% } %>
 // Configure Restful API, along with Morgan analytics/logs
 app.use(morgan('combined'))
 app.use(bodyParser.urlencoded({'extended': 'true'}))
@@ -40,10 +46,18 @@ app.use(bodyParser.json({type: 'application/vnd.api+json'}))
 app.use(methodOverride())
 
 //  Register all API RESTful endpoints with <modelName> as default routing
-for (var m in models.names){
-  m.register(app, '/api/' + m)
+for (var m of models.names){
+  app.resource = models[m + 'Model']
+  models[m + 'Model'].register(app, '/api/' + m)
+  logger.info("[API] Registered API /api/" + m);
 }
-
+<% if (appAuthentication) {%>
+  // Registers user authentication and JWT token
+  var auth = require('./auth')
+  app.use(auth.authStrategy().initialize())
+  // Registers route to JWT token
+  app.post('/auth/token', auth.getTokenAPI)
+<% } %>
 <% if (appType !== 'Backend'){ %>
 // Configure react to be loaded on root url
 app.get('/', function(req, res) {
