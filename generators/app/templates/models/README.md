@@ -18,8 +18,8 @@ yo redactive:model "user|name:String:userDefault:required"
 When a model is created by the directive above, it is automatically loaded
 with a full RESTful interface, provided by the package [node-restful](https://github.com/baugarten/node-restful) The default format for each call is as follows:
 
-GET /<module_name>
-GET /<module_name>/:id
-POST /<module_name>
-PUT /<module_name>/:id
-DELETE /<module_name>/:id
+* GET /<module_name>
+* GET /<module_name>/:id
+* POST /<module_name>
+* PUT /<module_name>/:id
+* DELETE /<module_name>/:id
