@@ -5,7 +5,7 @@ const fs = require('fs')
 
 var fnames = []
 
-fs.readdirSync(path.join(__dirname, '/')).forEach(function (file) {
+fs.readdirSync('./models').forEach(function (file) {
   if (file.match(/\.js$/) !== null && file !== 'index.js') {
     var name = file.replace('.js', '')
     exports[name + 'Model'] = require('./' + file)
