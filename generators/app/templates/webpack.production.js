@@ -9,7 +9,7 @@ const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
   // The entry file. All your app roots fromn here.
-  entry: [path.join(__dirname, 'server.js')],
+  entry: ['babel-polyfill', path.join(__dirname, 'server.js')],
   // Where you want the output to go
   output: {
     path: path.join(__dirname, '/dist/'),
@@ -26,18 +26,20 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.NamedModulesPlugin(),
+<% if(appType !== 'Backend'){ %>
     // handles creating an index.html file and injecting assets. necessary because assets
     // change name because the hash part changes. We want hash name changes to bust cache
     // on client browsers.
-    // new HtmlWebpackPlugin({
-    //     template: 'app/public/index.tpl.html',
-    //     inject: 'body',
-    //     filename: 'index.html'
-    // }),
+    new HtmlWebpackPlugin({
+         template: 'app/public/index.tpl.html',
+         inject: 'body',
+         filename: 'index.html'
+    }),
     // extracts the css from the js files and puts them on a separate .css file. this is for
     // performance and is used in prod environments. Styles load faster on their own .css
     // file as they dont have to wait for the JS to load.
     new ExtractTextPlugin('[name]-[hash].min.css'),
+<% } %>
     // handles uglifying js
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
@@ -55,6 +57,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.APP_NAME': JSON.stringify('<%= appName %>'),
       'process.env.APP_PORT': 3000,
+      'process.env.DB_URI': JSON.stringify('mongodb://localhost:27017/<%= appName %>'),
       // Configuration for Winston logging
       'process.env.LOG_FILENAME': JSON.stringify('/logs/winston.log'),
       'process.env.MONGODB_LOG_URI': JSON.stringify('mongodb://localhost:27017/winston')
