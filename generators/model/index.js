@@ -21,7 +21,7 @@ module.exports = require('yeoman-generator').Base.extend({
     }
     this.fs.copyTpl(
       this.templatePath(modelPath),
-      this.destinationPath('models/' + model[0] + '.model.js'), {
+      this.destinationPath('models/' + model[0] + '.js'), {
         modelName: model[0],
         attrConfig: model[1],
         appContext: this.appContext
