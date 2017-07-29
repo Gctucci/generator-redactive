@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 
 module.exports = [
+  <% if (appType === 'Backend') { %>
   // Server configuration
   {
 
@@ -58,7 +59,7 @@ module.exports = [
       ]
     }
   },
-  <% if (appType !== 'Backend'){ %>
+  <% } else { %>
   // Client configuration
   {
     devtool: 'eval-source-map',
