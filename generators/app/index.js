@@ -97,6 +97,8 @@ module.exports = yeoman.Base.extend({
       appRedis: this.props.appRedis
     })
 
+    this.fs.copyTpl(this.templatePath('helpers/utils.js'), this.destinationPath('helpers/utils.js'))
+
     this.fs.copyTpl(this.templatePath('.eslintrc'), this.destinationPath('.eslintrc'), {appName: this.props.appName})
 
     this.fs.copyTpl(this.templatePath('.eslintignore'), this.destinationPath('.eslintignore'), {appName: this.props.appName})
@@ -135,7 +137,7 @@ module.exports = yeoman.Base.extend({
       // Copy optional appAuthentication module
       if (this.props.appAuthentication) {
 
-        this.fs.copyTpl(this.templatePath('auth.js'), this.destinationPath('auth.js'), {appName: this.props.appName})
+        this.fs.copyTpl(this.templatePath('helpers/auth.js'), this.destinationPath('helpers/auth.js'), {appName: this.props.appName})
         this.fs.copyTpl(this.templatePath('models/users.js'), this.destinationPath('models/users.js'), {appName: this.props.appName})
         this.fs.copyTpl(this.templatePath('models/groups.js'), this.destinationPath('models/groups.js'), {appName: this.props.appName})
       }

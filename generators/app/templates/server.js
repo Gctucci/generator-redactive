@@ -81,7 +81,7 @@ var bruteforceAuth = new expressBrute(store, {
 	failCallback: failAPICallback
 });
 // Registers user authentication and JWT token
-var auth = require('./auth')
+var auth = require('./helpers/auth')
 app.use(auth.authStrategy().initialize())
 // Registers route to JWT token
 app.post('/auth/token', bruteforceAuth.prevent, auth.getTokenAPI)

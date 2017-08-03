@@ -1,6 +1,10 @@
+var logger = require('../connectors/logger')
+var utils = require('./utils')
 var passport = require('passport')
 var passportJWT = require('passport-jwt')
-var users = require('./models/users.js')
+var users = require('../models/users.js')
+var jwt = require('jwt-simple') // used to create, sign, and verify tokens
+
 var ExtractJwt = passportJWT.ExtractJwt
 var Strategy = passportJWT.Strategy
 
@@ -14,21 +18,24 @@ var params = {
 }
 
 authConfig.getTokenAPI = function(req, res) {
-  if (req.body.email && req.body.password) {
+  var params = ['email', 'password']
+  if (utils.hasParams(params, req.body)) {
     var email = req.body.email;
     var password = req.body.password;
-    var user = users.find(function(u) {
-      return u.email === email && u.password === password;
-    });
+    users.findOne({"email": email, "password": password}).then(function(user){
     if (user) {
-      var payload = {id: user._id};
-      var token = jwt.encode(payload, jwtSecret);
-      res.json({token: token});
+      var payload = {
+        id: user._id
+      }
+      var token = jwt.encode(payload, jwtSecret)
+      res.json({token: token})
     } else {
-      res.sendStatus(401);
+      logger.error('[AUTH] Failed to get token for email=' + email)
+      res.status(401).send({'error': 'No user found with these credentials'})
     }
+    })
   } else {
-    res.sendStatus(401);
+    res.status(401).send({'error': 'Malformed request. Please provide the fields: ' + params})
   }
 }
 

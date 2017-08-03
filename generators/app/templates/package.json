@@ -18,6 +18,7 @@
   "author": "<%= appAuthor %>",
   "license": "<%= appLicense %>",
   "dependencies": {
+    "jwt-simple": "^0.5.1",
     "express-brute": "^1.0.1",
     "express-brute-redis": "0.0.1",
     "node-restful": "^0.2.6",
