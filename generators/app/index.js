@@ -48,8 +48,8 @@ module.exports = yeoman.Base.extend({
         }
       }, {
         type: 'confirm',
-        name: 'appCache',
-        message: 'Do you want to setup a caching system (Redis)?'
+        name: 'appRedis',
+        message: 'Do you want to use a caching system and enable other features (Redis)?'
       }, {
         type: 'confirm',
         name: 'appMessaging',
@@ -93,7 +93,8 @@ module.exports = yeoman.Base.extend({
       appName: this.props.appName,
       appType: this.props.appType,
       appDB: this.props.appDB,
-      appAuthentication: this.props.appAuthentication
+      appAuthentication: this.props.appAuthentication,
+      appRedis: this.props.appRedis
     })
 
     this.fs.copyTpl(this.templatePath('.eslintrc'), this.destinationPath('.eslintrc'), {appName: this.props.appName})

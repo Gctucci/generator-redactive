@@ -18,6 +18,8 @@
   "author": "<%= appAuthor %>",
   "license": "<%= appLicense %>",
   "dependencies": {
+    "express-brute": "^1.0.1",
+    "express-brute-redis": "0.0.1",
     "node-restful": "^0.2.6",
     "bcrypt": "^1.0.2",
     "passport": "^0.3.2",

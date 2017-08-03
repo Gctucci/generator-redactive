@@ -9,10 +9,14 @@ var config = require('./webpack.config')
 var logger = require('./connectors/logger')
 var db = require('./connectors/database')
 var models = require('./models')
+var expressBrute = require('express-brute')
+var moment = require('moment')
 
 const app = express()
 
 if (process.env.NODE_ENV !== 'production') {
+  // Store state locally
+  var store = new expressBrute.MemoryStore()
   // Load Hot Reloading and Development servers in dev mode
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -33,6 +37,23 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(middleware)
   app.use(webpackHotMiddleware(compiler))
 }
+else{
+<%if (appRedis) { %>
+  var redisStore = require('express-brute-redis')
+
+  var store = new redisStore({
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT
+  })
+<%} else{%>
+  // Store state locally, PLEASE CHANGE THIS.IT IS NOT SAFE IN PRODUCTION
+  var store = new expressBrute.MemoryStore()
+<%}%>
+}
+// Set up a fail callback for bruteforce attemps
+var failAPICallback = function (req, res, next, nextValidRequestDate) {
+	res.json({'error': "You've made too many failed attempts in a short period of time, please try again "+moment(nextValidRequestDate).fromNow()});
+};
 
 // Connects automatically to the database
 <% if (appDB === 'MongoDB'){ %>
@@ -52,11 +73,18 @@ for (var m of models.names){
   logger.info("[API] Registered API /api/" + m);
 }
 <% if (appAuthentication) {%>
-  // Registers user authentication and JWT token
-  var auth = require('./auth')
-  app.use(auth.authStrategy().initialize())
-  // Registers route to JWT token
-  app.post('/auth/token', auth.getTokenAPI)
+// Configure Bruteforce protection for authentication
+var bruteforceAuth = new expressBrute(store, {
+	freeRetries: 5,
+	minWait: 5*60*1000, // 5 minutes
+	maxWait: 60*60*1000, // 1 hour,
+	failCallback: failAPICallback
+});
+// Registers user authentication and JWT token
+var auth = require('./auth')
+app.use(auth.authStrategy().initialize())
+// Registers route to JWT token
+app.post('/auth/token', bruteforceAuth.prevent, auth.getTokenAPI)
 <% } %>
 <% if (appType !== 'Backend'){ %>
 // Configure react to be loaded on root url
