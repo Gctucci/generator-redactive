@@ -48,7 +48,10 @@ module.exports = [
       'process.env.APP_HOST': JSON.stringify('localhost'),
       'process.env.LOG_FILENAME': JSON.stringify('logger_data'),
       'process.env.DB_RECONNECT_TIME': 5000,
-      'process.env.DB_URI':JSON.stringify('mongodb://localhost:27017/<%= appName %>')
+      'process.env.DB_URI':JSON.stringify('mongodb://localhost:27017/<%= appName %>'),
+      // Configuring Redis Store
+      'process.env.REDIS_HOST': JSON.stringify('127.0.0.1'),
+      'process.env.REDIS_PORT': 6379
       })
     ],
     eslint: {

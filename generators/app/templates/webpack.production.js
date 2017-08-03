@@ -61,8 +61,10 @@ module.exports = {
       'process.env.DB_URI': JSON.stringify('mongodb://localhost:27017/<%= appName %>'),
       // Configuration for Winston logging
       'process.env.LOG_FILENAME': JSON.stringify('/logs/winston.log'),
-      'process.env.MONGODB_LOG_URI': JSON.stringify('mongodb://localhost:27017/winston')
-
+      'process.env.MONGODB_LOG_URI': JSON.stringify('mongodb://localhost:27017/winston'),
+      // Configuring Redis Store
+      'process.env.REDIS_HOST': JSON.stringify('127.0.0.1'),
+      'process.env.REDIS_PORT': 6379
     })
   ],
 
