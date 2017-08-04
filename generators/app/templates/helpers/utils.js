@@ -2,9 +2,9 @@
 
 var utils = {}
 
-utils.hasParams = function (reqFields, body) {
+utils.hasParams = function(reqFields, body) {
   var check = true
-  reqFields.forEach(function (item) {
+  reqFields.forEach(function(item) {
     if (!body.hasOwnProperty(item)) {
       check = false
     }

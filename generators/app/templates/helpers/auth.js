@@ -20,22 +20,33 @@ var params = {
 authConfig.getTokenAPI = function(req, res) {
   var params = ['email', 'password']
   if (utils.hasParams(params, req.body)) {
-    var email = req.body.email;
-    var password = req.body.password;
-    users.findOne({"email": email, "password": password}).then(function(user){
-    if (user) {
-      var payload = {
-        id: user._id
+    var email = req.body.email
+    var password = req.body.password
+    users.findOne({"email": email}).then(function(user) {
+      if (user) {
+        user.comparePassword(password, function(err, auth) {
+          if (err) {
+            logger.error('[API] Error while getting the password: ' + err)
+            res.json({'error': 'Unexpected error. Please try again later'})
+          } else if (auth) {
+            var payload = {
+              id: user._id
+            }
+            var token = jwt.encode(payload, jwtSecret)
+            res.json({token: token})
+          } else {
+            res.json({'error': 'Wrong email/password. Please try again'})
+          }
+        })
+      } else {
+        logger.error('[AUTH] Failed to authenticate with email=' + email)
+        res.status(401).send({'error': 'No user found with these credentials'})
       }
-      var token = jwt.encode(payload, jwtSecret)
-      res.json({token: token})
-    } else {
-      logger.error('[AUTH] Failed to get token for email=' + email)
-      res.status(401).send({'error': 'No user found with these credentials'})
-    }
     })
   } else {
-    res.status(401).send({'error': 'Malformed request. Please provide the fields: ' + params})
+    res.status(401).send({
+      'error': 'Malformed request. Please provide the fields: ' + params
+    })
   }
 }
 
